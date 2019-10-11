@@ -125,7 +125,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         holder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shoppingListViewModel.getShoppingLists().add(shoppingListViewModel.getShoppingLists().get(position));
+                ShoppingList shoppingList = new ShoppingList(shoppingListViewModel.getShoppingLists().get(position).getListName());
+                shoppingList.setItems(shoppingListViewModel.getShoppingLists().get(position).getItems());
+                shoppingListViewModel.getShoppingLists().add(shoppingList);
                 notifyItemInserted(position+1);
                 notifyItemRangeChanged(position+1, shoppingListViewModel.getShoppingLists().size());
                 shoppingListViewModel.saveShoppingList(view.getContext(), FILENAME);
