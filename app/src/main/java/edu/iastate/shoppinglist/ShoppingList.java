@@ -27,11 +27,7 @@ public class ShoppingList {
         return items.size();
     }
 
-    public void newItem(String item) {
-        items.add(item);
-    }
-
-    public  void removeItem(String item) {
-        items.remove(item);
+    public void setItems(ArrayList<String> items) {
+        this.items = items;
     }
 }

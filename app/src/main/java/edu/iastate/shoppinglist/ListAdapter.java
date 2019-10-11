@@ -1,5 +1,6 @@
 package edu.iastate.shoppinglist;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
-    private ArrayList<ShoppingListViewModel> shoppingLists;
+    private static final String ITEM_LIST_EXTRA = "itemList";
+    private static final String POSITION = "position";
+    private static final int CONTACT_REQUEST = 1;
+
+    private ArrayList<ShoppingList> shoppingLists;
 
     /**
      * {@inheritDoc}
@@ -33,13 +38,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         //Shopping list name.
-        holder.listName.setText(shoppingLists.get(position).shoppingList.getListName());
+        holder.listName.setText(shoppingLists.get(position).getListName());
         //Open shopping list.
         holder.listName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ItemListActivity.class);
-                view.getContext().startActivity(intent);
+                intent.putExtra(ITEM_LIST_EXTRA, shoppingLists.get(position).getItems());
+                intent.putExtra(POSITION, position);
+                ((Activity)view.getContext()).startActivityForResult(intent, CONTACT_REQUEST);
             }
         });
         //Edit shopping list name.
@@ -54,7 +61,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
                     public void onClick(DialogInterface dialog, int which) {
                         String newListName = input.getText().toString();
                         holder.listName.setText(newListName);
-                        shoppingLists.get(position).shoppingList.setListName(newListName);
+                        shoppingLists.get(position).setListName(newListName);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -69,7 +76,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             }
         });
         //Shopping list item count.
-        holder.itemCount.setText(shoppingLists.get(position).shoppingList.getItemCount() + "");
+        holder.itemCount.setText(shoppingLists.get(position).getItemCount() + "");
         //Shopping list remove button.
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +120,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         }
     }
 
-    public ListAdapter(ArrayList<ShoppingListViewModel> shoppingLists) {
+    public ListAdapter(ArrayList<ShoppingList> shoppingLists) {
         this.shoppingLists = shoppingLists;
     }
 
