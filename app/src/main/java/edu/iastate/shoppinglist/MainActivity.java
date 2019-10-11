@@ -110,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * {@inheritDoc}
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode Request code.
+     * @param resultCode Result code.
+     * @param data Intent.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> itemList = data.getExtras().getStringArrayList(ITEM_LIST_EXTRA);
                 int position = data.getExtras().getInt(POSITION);
                 shoppingListViewModel.getShoppingLists().get(position).setItems(itemList);
+                adapter = new ListAdapter(shoppingListViewModel);
+                recyclerView.setAdapter(adapter);
                 shoppingListViewModel.saveShoppingList(this, FILENAME);
             }
         }

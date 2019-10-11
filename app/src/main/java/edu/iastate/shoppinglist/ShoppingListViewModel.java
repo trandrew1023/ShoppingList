@@ -59,7 +59,7 @@ public class ShoppingListViewModel extends ViewModel {
 
     /**
      * Loads the list of shopping lists from a file.
-     * @param context Current state/conext.
+     * @param context Current state/context.
      * @param filename Name of file to load content from.
      */
     public void loadShoppingList(Context context, String filename) {

@@ -26,7 +26,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 
     /**
      * Constructor for {@link ItemListAdapter}.
-     * @param itemList
+     * @param itemList Shopping list items.
      */
     public ItemListAdapter(ArrayList<String> itemList) {
         this.items = itemList;
@@ -34,9 +34,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 
     /**
      * {@inheritDoc}
-     * @param parent
-     * @param viewType
-     * @return
+     * @param parent Parent viewgroup.
+     * @param viewType Viewtype.
+     * @return View holder.
      */
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,8 +47,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 
     /**
      * {@inheritDoc}
-     * @param holder
-     * @param position
+     * @param holder View holder.
+     * @param position Item position.
      */
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
@@ -109,7 +109,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.MyView
 
         /**
          * Constructor for {@link MyViewHolder}
-         * @param itemView
+         * @param itemView Item view.
          */
         public MyViewHolder(View itemView) {
             super(itemView);
