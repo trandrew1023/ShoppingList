@@ -13,14 +13,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
     private static final String ITEM_LIST_EXTRA = "itemList";
     private static final String POSITION = "position";
+    private static final String FILENAME = "filename";
     private static final int CONTACT_REQUEST = 1;
 
-    private ArrayList<ShoppingList> shoppingLists;
+    private ShoppingListViewModel shoppingListViewModel;
 
     /**
      * {@inheritDoc}
@@ -38,13 +37,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         //Shopping list name.
-        holder.listName.setText(shoppingLists.get(position).getListName());
+        holder.listName.setText(shoppingListViewModel.getShoppingLists().get(position).getListName());
         //Open shopping list.
         holder.listName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ItemListActivity.class);
-                intent.putExtra(ITEM_LIST_EXTRA, shoppingLists.get(position).getItems());
+                intent.putExtra(ITEM_LIST_EXTRA, shoppingListViewModel.getShoppingLists().get(position).getItems());
                 intent.putExtra(POSITION, position);
                 ((Activity)view.getContext()).startActivityForResult(intent, CONTACT_REQUEST);
             }
@@ -52,7 +51,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         //Edit shopping list name.
         holder.listName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public boolean onLongClick(final View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 final EditText input = new EditText(view.getContext());
                 builder.setView(input);
@@ -61,7 +60,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
                     public void onClick(DialogInterface dialog, int which) {
                         String newListName = input.getText().toString();
                         holder.listName.setText(newListName);
-                        shoppingLists.get(position).setListName(newListName);
+                        shoppingListViewModel.getShoppingLists().get(position).setListName(newListName);
+                        shoppingListViewModel.saveShoppingList(view.getContext(), FILENAME);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -76,23 +76,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             }
         });
         //Shopping list item count.
-        holder.itemCount.setText(shoppingLists.get(position).getItemCount() + "");
+        holder.itemCount.setText(shoppingListViewModel.getShoppingLists().get(position).getItemCount() + "");
         //Shopping list remove button.
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shoppingLists.remove(position);
+                shoppingListViewModel.getShoppingLists().remove(position);
                 notifyItemRemoved(position);
-                notifyItemRangeChanged(position, shoppingLists.size());
+                notifyItemRangeChanged(position, shoppingListViewModel.getShoppingLists().size());
+                shoppingListViewModel.saveShoppingList(view.getContext(), FILENAME);
             }
         });
         //Shopping list copy button.
         holder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shoppingLists.add(shoppingLists.get(position));
+                shoppingListViewModel.getShoppingLists().add(shoppingListViewModel.getShoppingLists().get(position));
                 notifyItemInserted(position+1);
-                notifyItemRangeChanged(position+1, shoppingLists.size());
+                notifyItemRangeChanged(position+1, shoppingListViewModel.getShoppingLists().size());
+                shoppingListViewModel.saveShoppingList(view.getContext(), FILENAME);
             }
         });
     }
@@ -102,7 +104,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
      */
     @Override
     public int getItemCount() {
-        return shoppingLists.size();
+        return shoppingListViewModel.getShoppingLists().size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -120,9 +122,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         }
     }
 
-    public ListAdapter(ArrayList<ShoppingList> shoppingLists) {
-        this.shoppingLists = shoppingLists;
+    public ListAdapter(ShoppingListViewModel shoppingListViewModel) {
+        this.shoppingListViewModel = shoppingListViewModel;
     }
-
-
 }

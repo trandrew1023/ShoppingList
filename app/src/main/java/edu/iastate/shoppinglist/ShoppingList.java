@@ -1,8 +1,9 @@
 package edu.iastate.shoppinglist;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ShoppingList {
+public class ShoppingList implements Serializable {
     private String listName;
     private ArrayList<String> items;
 
