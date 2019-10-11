@@ -13,13 +13,46 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Adapter that binds the shopping lists to the recycler view.
+ */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
+    private static final String TAG = "ListAdapter";
+
+    //Constants
+    /**
+     * Intent extra key for the shopping list's items.
+     */
     private static final String ITEM_LIST_EXTRA = "itemList";
-    private static final String POSITION = "position";
+    /**
+     * Intent extra key for the list name.
+     */
+    private static final String LIST_NAME_EXTRA = "listName";
+    /**
+     * Intent extra key for the shopping list's position in the ArrayList.
+     */
+    private static final String POSITION_EXTRA = "position";
+    /**
+     * Name of file to save and load content from.
+     */
     private static final String FILENAME = "filename";
+    /**
+     * Used to identify the result from starting item list activity.
+     */
     private static final int CONTACT_REQUEST = 1;
 
+    /**
+     * Shopping list view model which contains all shopping lists.
+     */
     private ShoppingListViewModel shoppingListViewModel;
+
+    /**
+     * Constructor for {@link ListAdapter}
+     * @param shoppingListViewModel The shopping list view model.
+     */
+    public ListAdapter(ShoppingListViewModel shoppingListViewModel) {
+        this.shoppingListViewModel = shoppingListViewModel;
+    }
 
     /**
      * {@inheritDoc}
@@ -44,7 +77,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ItemListActivity.class);
                 intent.putExtra(ITEM_LIST_EXTRA, shoppingListViewModel.getShoppingLists().get(position).getItems());
-                intent.putExtra(POSITION, position);
+                intent.putExtra(LIST_NAME_EXTRA, shoppingListViewModel.getShoppingLists().get(position).getListName());
+                intent.putExtra(POSITION_EXTRA, position);
                 ((Activity)view.getContext()).startActivityForResult(intent, CONTACT_REQUEST);
             }
         });
@@ -101,18 +135,26 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
 
     /**
      * {@inheritDoc}
+     * @return The number of shopping lists.
      */
     @Override
     public int getItemCount() {
         return shoppingListViewModel.getShoppingLists().size();
     }
 
+    /**
+     * View holder class for the shopping lists recycler view.
+     */
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView listName;
         TextView itemCount;
         Button copy;
         Button remove;
 
+        /**
+         * Constructor for {@link MyViewHolder}
+         * @param itemView The current view.
+         */
         public MyViewHolder(View itemView) {
             super(itemView);
             listName = itemView.findViewById(R.id.list_name);
@@ -120,9 +162,5 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             copy = itemView.findViewById(R.id.copy);
             remove = itemView.findViewById(R.id.remove);
         }
-    }
-
-    public ListAdapter(ShoppingListViewModel shoppingListViewModel) {
-        this.shoppingListViewModel = shoppingListViewModel;
     }
 }

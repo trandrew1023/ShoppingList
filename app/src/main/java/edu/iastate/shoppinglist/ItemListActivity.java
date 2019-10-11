@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -15,29 +14,61 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 /**
- *
+ *  Activity class for items in a shopping list.
  */
 public class ItemListActivity extends AppCompatActivity {
     private static final String TAG = "ItemListActivity";
 
-    private int position;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<String> itemList = new ArrayList<>();
-
+    //Constants
+    /**
+     * Intent extra key for the shopping list's items.
+     */
     private static final String ITEM_LIST_EXTRA = "itemList";
+    /**
+     * Name of file to save and load content from.
+     */
+    private static final String LIST_NAME_EXTRA = "listName";
+    /**
+     * Intent extra key for the shopping list's position in the ArrayList.
+     */
     private static final String POSITION = "position";
 
+    /**
+     * The shopping list's position in the ArrayList.
+     */
+    private int position;
+    /**
+     * Recycler view for the item list.
+     */
+    private RecyclerView recyclerView;
+    /**
+     * Adaptor to bind the item list to recycler view.
+     */
+    private RecyclerView.Adapter adapter;
+    /**
+     * Recycler view layout.
+     */
+    private RecyclerView.LayoutManager layoutManager;
+    /**
+     * Items in the shopping list.
+     */
+    private ArrayList<String> itemList = new ArrayList<>();
+
+    /**
+     * {@inheritDoc}
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
+        //Set title to be the list name.
+        setTitle(getIntent().getExtras().getString(LIST_NAME_EXTRA));
         //Get the items for the selected shopping list.
         itemList = getIntent().getExtras().getStringArrayList(ITEM_LIST_EXTRA);
         //Get the position of the selected shopping list to return.
         position = getIntent().getExtras().getInt(POSITION);
-
+        //Get item list recycler view.
         recyclerView = findViewById(R.id.itemRecyclerView);
         //Set layout.
         layoutManager = new LinearLayoutManager(this);
@@ -52,6 +83,7 @@ public class ItemListActivity extends AppCompatActivity {
      * @param view The current view.
      */
     public void newItem(View view) {
+        //Text input prompt.
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         final EditText input = new EditText(view.getContext());
         builder.setView(input);
@@ -82,12 +114,19 @@ public class ItemListActivity extends AppCompatActivity {
         onBackPressed();
     }
 
+    /**
+     * Clears the item list and updates the view.
+     * @param view The current view.
+     */
     public void onClear(View view) {
         itemList = new ArrayList<>();
         adapter = new ItemListAdapter(itemList);
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

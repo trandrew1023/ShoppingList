@@ -1,38 +1,64 @@
 package edu.iastate.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * Main activity class for shopping lists.
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
+    //Constants
+    /**
+     * Intent extra key for the shopping list's items.
+     */
     private static final String ITEM_LIST_EXTRA = "itemList";
+    /**
+     * Intent extra key for the shopping list's position in the ArrayList.
+     */
     private static final String POSITION = "position";
+    /**
+     * Name of file to save and load content from.
+     */
     private static final String FILENAME = "filename";
+    /**
+     *  Used to identify the result from starting item list activity.
+     */
     private static final int CONTACT_REQUEST = 1;
 
+    /**
+     * Recycler view for the shopping lists.
+     */
     private RecyclerView recyclerView;
+    /**
+     * Adaptor to bind shopping lists to recycler view.
+     */
     private RecyclerView.Adapter adapter;
+    /**
+     * Recycler view layout.
+     */
     private RecyclerView.LayoutManager layoutManager;
+    /**
+     * Shopping list view model which contains all shopping lists.
+     */
     private ShoppingListViewModel shoppingListViewModel;
 
+    /**
+     * {@inheritDoc}
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +78,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Adds a new shopping list.
+     * @param view The current view.
+     */
     public void newList(final View view) {
+        //Text input prompt.
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         final EditText input = new EditText(view.getContext());
         builder.setView(input);
@@ -77,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CONTACT_REQUEST) {
