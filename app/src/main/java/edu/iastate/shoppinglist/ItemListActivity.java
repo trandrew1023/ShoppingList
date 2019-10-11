@@ -14,7 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 /**
- *  Activity class for items in a shopping list.
+ *  Activity class for items in a shopping list. <br>
+ *  Tap and hold the item name to rename the item. <br>
+ *  Tap remove to remove the item from the list. <br>
+ *  Tap save to save the shopping list.<br>
+ *  Tap plus to add a new item. <br>
+ *  Tap clear to remove all the items. <br>
+ *  Back or save will save the items and go back to the main activity.
  */
 public class ItemListActivity extends AppCompatActivity {
     private static final String TAG = "ItemListActivity";

@@ -15,7 +15,13 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 /**
- * Main activity class for shopping lists.
+ * Main activity class for shopping lists. <br>
+ * Tap on the shopping list name to open the item list. <br>
+ * Tap and hold the shopping list name to rename the shopping list. <br>
+ * Tap copy to create a copy of the shopping list. <br>
+ * Tap remove to remove the shopping list. <br>
+ * Tap the plus button to create a new shopping list. <br>
+ * The number next to copy displays the number of items the shopping list has.
  */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
